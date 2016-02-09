@@ -1,0 +1,9 @@
+6993d4fe90e2d67ee70030b85fc1a1de *DESCRIPTION
+a4f4b7c229f8949b1220e314f3cb9bb6 *NAMESPACE
+152878ccd333f2866eab558a8b329125 *R/fastGraph.R
+28202fd0858ba8a0edaa05ee27fa27f1 *man/fastGraph-package.Rd
+d30c175630a451794002c8773a4cb177 *man/getMinMax.Rd
+04c7fc6e8d08f14ce688e4c3f66b1e7f *man/plotDist.Rd
+530249ac845617bcf9f8df0455d3c93c *man/plotLine.Rd
+70c8019c75a669c4e13318092b021e98 *man/shadeDist.Rd
+8ec4b0f067cc35ab3424efa7e68305d7 *man/shadePhat.Rd

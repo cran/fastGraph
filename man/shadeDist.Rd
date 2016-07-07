@@ -11,7 +11,7 @@ This function plots a probability density function, shades the area under the cu
 shadeDist(xshade = NULL, ddist = "dnorm", parm1 = NULL, parm2 = NULL, lower.tail = TRUE,
           xlab=NULL, xmin = NULL, xmax = NULL, xtic = TRUE, digits.prob = 4, 
           digits.xtic = 3, is.discrete = NULL, additional.x.range = NULL, main = NULL, 
-          col = c("black", "pink"), lwd = 5, ...)
+          col = c("black", "hotpink"), lwd = 5, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -10,20 +10,23 @@
 \tabular{ll}{
 Package: \tab fastGraph\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2016-02-07\cr
+Version: \tab 1.1\cr
+Date: \tab 2016-07-07\cr
 License: \tab GPL-3\cr
 }
-The function \code{\link{plotDist}} draws as many as three probability density functions
-or cumulative distribution functions on the same graph.
-The function \code{\link{shadeDist}} draws a probability density function, shades
-in area under the curve, and lists the probability in the title of the graph.
-The function \code{\link{shadePhat}} is similar to \code{\link{shadeDist}} but
-considers the distribution of only the sample proportion.
-The function \code{\link{getMinMax}} is called by both \code{\link{plotDist}} and \code{\link{shadeDist}} 
-for determining a reasonable domain for plotting the graph.
-The function \code{\link{plotLine}} performs a simple scatter plot, fits the linear regression line,
-and states the equation of the line in the title.
+
+\itemize{
+\item{\code{\link{plotDist}} draws as many as three probability density functions
+or cumulative distribution functions on the same graph.}
+\item{\code{\link{shadeDist}} draws a probability density function, shades
+in area under the curve, and lists the probability in the title of the graph.}
+\item{\code{\link{shadePhat}} is similar to \code{\link{shadeDist}} but
+considers the distribution of only the sample proportion.}
+\item{\code{\link{plotLine}} performs a simple scatter plot, fits the linear regression line,
+and states the equation of the line in the title.}
+\item{\code{\link{getMinMax}} is called by both \code{\link{plotDist}} and \code{\link{shadeDist}} 
+for determining a reasonable domain for plotting the graph.}
+}
 }
 \author{Steven T. Garren, James Madison University, Harrisonburg, Virginia, USA;
 GARRENST AT JMU DOT EDU

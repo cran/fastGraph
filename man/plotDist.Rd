@@ -111,7 +111,8 @@ The default values of all of the arguments following \code{parmC2} usually are s
 Steven T. Garren, James Madison University, Harrisonburg, Virginia, USA
 }
 \note{
-This function \code{plotDist} calls function \code{\link{getMinMax}}.
+This function \code{plotDist} calls functions \code{\link{getMinMax}},
+\code{\link[graphics]{plot}}, and \code{\link[graphics]{curve}}.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

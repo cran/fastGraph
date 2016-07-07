@@ -1,7 +1,7 @@
 shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
                   lower.tail=TRUE, xlab=NULL, xmin=NULL, xmax=NULL, xtic=TRUE,
                   digits.prob=4, digits.xtic=3, is.discrete=NULL,
-                  additional.x.range=NULL, main=NULL, col=c("black","pink"), lwd=5, ...) {
+                  additional.x.range=NULL, main=NULL, col=c("black","hotpink"), lwd=5, ...) {
   # Plots a continuous probability density function (pdf) and shades in a region.
   # `xshade' can be a scalar or a vector of size 2.
   # When `xshade' is a scalar and lower.tail is TRUE,
@@ -13,7 +13,7 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
   # When `xshade' is a vector and lower.tail is FALSE,
   #    the area from xshade[1] to xshade[2] is shaded.
   # `ddist' is the pdf and must be in quotes.  Some choices are
-  #    dnorm, dexp, dcauchy, dlaplace, dt, dt.nc, dchisq, df, df.nc, dunif.
+  #    dnorm, dexp, dcauchy, dt, dchisq, df, dunif.
   #    If the random variable is a sample proportion, then set ddist="dprop" and use same parameters from "dbinom".
   # `parm1' and `parm2' are numeric scalars or vectors of the parameters of `distA'
   #    (excluding the first argument), where NULL is the default value.
@@ -21,7 +21,7 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
   #    to be a vector of all (as many as 5) parameters, and keep `parm2' equal to NULL.
   #    For example, to shade a noncentral F pdf with 7 and 9 df and ncp=2.5 in the
   #       right tail beginning at 6, type:
-  #       > shadeDist( 6, 'df.nc', c(7,9,2.5), NULL, F, 0, 8 )
+  #       > shadeDist( 6, 'df', c(7,9,2.5), NULL, lower.tail=F, xmin=0, xmax=8 )
   # To avoid ambiguity with discrete distributions, avoid boarder values with `xshade'.
   #    For example, if X ~ Binomial(n=10, p=0.4), then to graph P(X>2) type:
   #    > shadeDist( 2.5, 'dbinom', 10, 0.4, F )
@@ -77,11 +77,11 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
     if (ddist=="dnorm" & is.null(parm2)) parm2==1
     temp <- c(parm1, parm2)
     if (ddist=="dt" & length(temp)==1) xlab=paste(c("T_",temp[1]),sep="",collapse="")
-    if ( (ddist=="dt.nc" & length(temp)==2) | (ddist=="dt" & length(temp)==2) ) xlab=paste(c("T_",temp[1],",",temp[2]),sep="",collapse="")
+    if ( ddist=="dt" & length(temp)==2 ) xlab=paste(c("T_",temp[1],",",temp[2]),sep="",collapse="")
     if (ddist=="dchisq" & length(temp)==1) xlab=paste(c("CHI-SQUARE_",temp[1]),sep="",collapse="")
     if (ddist=="dchisq" & length(temp)==2) xlab=paste(c("CHI-SQUARE_",temp[1],",",temp[2]),sep="",collapse="")
     if (ddist=="df" & length(temp)==2) xlab=paste(c("F_",temp[1],",",temp[2]),sep="",collapse="")
-    if ( (ddist=="df.nc" & length(temp)==3) | (ddist=="df" & length(temp)==3) )
+    if ( ddist=="df" & length(temp)==3 )
                xlab=paste(c("F_",temp[1],",",temp[2],",",temp[3]),sep="",collapse="") }
   parm1 <- c(parm1, parm2);  temp.vec <- getMinMax(xmin, xmax, ddist, parm1)
   if (is.null(xshade)) {xshade <- temp.vec$medianA}
@@ -199,7 +199,7 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
 
 shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xmax=1,
                   xlab=expression(hat(p)), xtic=TRUE,
-                  digits.prob=4, digits.xtic=3, main=NULL, col=c("black","pink"), lwd=5, ...) {
+                  digits.prob=4, digits.xtic=3, main=NULL, col=c("black","hotpink"), lwd=5, ...) {
   # Plots a continuous probability density function (pdf) and shades in a region.
   # `xshade' can be a scalar or a vector of size 2.
   # When `xshade' is a scalar and lower.tail is TRUE,
@@ -291,10 +291,10 @@ plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
              is.discrete=NULL, additional.x.range=NULL, lwd=5, ...) {
   # Plots one, two, or three functions.
   # When plotting the pdf, some choices for `distA', `distB' and `distC' are
-  #    dnorm, dexp, dcauchy, dlaplace, dt, dt.nc, dchisq, df, df.nc, dunif, dbinom, 
+  #    dnorm, dexp, dcauchy, dt, dchisq, df, dunif, dbinom, 
   #    dgeom, dpois, dhyper, dnbinom.
   # When plotting the cdf, some choices for `distA', `distB' and `distC' are
-  #    pnorm, pexp, pcauchy, plaplace, pt, pchisq, pf, punif, pbinom, 
+  #    pnorm, pexp, pcauchy, pt, pchisq, pf, punif, pbinom, 
   #    pgeo, ppois, phyper, pnbinom.
   # The values of `distA', `distB' and `distC' must be in quotes if `xmin' or `xmax' is NULL.
   # `parmA1' and `parmA2' are numeric scalars or vectors of the parameters of `distA'
@@ -303,10 +303,6 @@ plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
   # `col' may be a scalar or vector, and specifies the colors of the plotted functions.
   #    Type `colors()' for selections.
   # If only one function is to be plotted, then use `distA'.
-  # If a distribution, say `distA', needs more than 2 parameters, then assign `parmA1'
-  #    to be a vector of all (as many as 5) parameters, and keep `parmA2' equal to NULL.
-  #    For example, to plot a noncentral F pdf with 7 and 9 df and ncp=2.5, type:
-  #    > plot2.dist( df.nc, c(7,9,2.5) )
   # `xmin' and `xmax' represent the limiting values on the x-axis.
   #    Reasonable values of `xmin' and `xmax' are attempted when originally set to NULL.
   # `xlab' is the label on the x-axis.  If NULL, `xlab' may be automatically set to `X',
@@ -367,7 +363,7 @@ plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
        xlab=paste(c("T_",temp[1]),sep="",collapse="")
        if ( !is.null(distB) ) { xlab="X"
            if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab="T" }  }
-    if (distA=="dt.nc" | (distA=="pt" & length(temp)==2) | (distA=="dt" & length(temp)==2)) {
+    if ( (distA=="pt" & length(temp)==2) | (distA=="dt" & length(temp)==2)) {
        xlab=paste(c("T_",temp[1],",",temp[2]),sep="",collapse="")
        if ( !is.null(distB) ) { xlab="X"
            if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab="T" }  }
@@ -380,7 +376,7 @@ plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
        xlab=paste(c("F_",temp[1],",",temp[2]),sep="",collapse="")
        if ( !is.null(distB) ) { xlab="X"
            if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab="F" }  }
-    if (distA=="df.nc" || (distA=="pf" & length(temp)==3) || (distA=="df" & length(temp)==3) ) {
+    if ( (distA=="pf" & length(temp)==3) || (distA=="df" & length(temp)==3) ) {
        xlab=paste(c("F_",temp[1],",",temp[2],",",temp[3]),sep="",collapse="")
        if ( !is.null(distB) ) { xlab="X"
            if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab="F" }  }     }
@@ -546,20 +542,16 @@ getMinMax <- function(xmin=NULL, xmax=NULL, distA, parmA1=NULL, parmA2=NULL,
   # `xmin' and `xmax' represent the limiting values on the x-axis.
   #    Reasonable values of `xmin' and `xmax' are attempted when originally set to NULL.
   # When plotting the pdf, some choices for `distA', `distB' and `distC' are
-  #    dnorm, dexp, dcauchy, dlaplace, dt, dt.nc, dchisq, df, df.nc, dunif, dbinom, 
+  #    dnorm, dexp, dcauchy, dt, dchisq, df, dunif, dbinom, 
   #    dgeom, dhyper, dpois, dnbinom.
   # When plotting the cdf, some choices for `distA', `distB' and `distC' are
-  #    pnorm, pexp, pcauchy, plaplace, pt, pchisq, pf, punif, pbinom, 
+  #    pnorm, pexp, pcauchy, pt, pchisq, pf, punif, pbinom, 
   #    pgeom, phyper, ppois, pnbinom.
   # The values of `distA', `distB' and `distC' must be in quotes if `xmin' or `xmax' is NULL.
   # `parmA1' and `parmA2' are numeric scalars or vectors of the parameters of `distA' 
   #    (excluding the first argument), where NULL is the default value; 
   #    likewise for the other two functions.
   # If only one function is to be plotted, then use `distA'.
-  # If a distribution, say `distA', needs more than 2 parameters, then assign `parmA1'
-  #    to be a vector of all (as many as 5) parameters, and keep `parmA2' equal to NULL.
-  #    For example, to plot a noncentral F pdf with 7 and 9 df and ncp=2.5, type:
-  #    > plot2.dist( 0, 8, "df.nc", c(7,9,2.5) )
   if (!is.character(distA))
      stop("'distA' must be a probability density function or cumulative distribution function in character format.")
   if (!(substring(distA,1,1) %in% c("d","p"))) stop("'distA' must be a probability density function or cumulative distribution in character format.")
@@ -589,8 +581,6 @@ getMinMax <- function(xmin=NULL, xmax=NULL, distA, parmA1=NULL, parmA2=NULL,
   return.now <- FALSE ;  medianA <- medianB <- medianC <- NULL
   parmA1 <- c(parmA1, parmA2); parmB1 <- c(parmB1, parmB2); parmC1 <- c(parmC1, parmC2)
   if (!is.null(xmin) & !is.null(xmax)) medianA <- medianB <- medianC <- mean(xmin,xmax)
-  if ("dt.nc" %in% c(distA, distB, distC)) return.now <- TRUE
-  if ("df.nc" %in% c(distA, distB, distC)) return.now <- TRUE
   # if (distA=="pt" & length(parmA1)>1) return.now <- TRUE
   # if (!is.null(distB)) {if (distB=="pt" & length(parmB1)>1) return.now <- TRUE}
   # if (!is.null(distC)) {if (distC=="pt" & length(parmC1)>1) return.now <- TRUE}

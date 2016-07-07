@@ -17,7 +17,7 @@ Alternatively, a single plotting structure or function can be provided.
 }
   \item{y}{The y coordinates of points in the plot, optional if \code{x} is an appropriate structure.
 }
-  \item{data}{A data frame including the x and y coordinates.
+  \item{data}{A data frame including the \code{x} and \code{y} coordinates.
 }
   \item{xlab}{The label of the \code{x} variable.
 }

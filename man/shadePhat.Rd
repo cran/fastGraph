@@ -10,12 +10,13 @@ This function plots a probability density function of a sample proportion, shade
 \usage{
 shadePhat(xshade = NULL, size = 1, prob = 0.5, lower.tail = TRUE, xmin = 0, xmax = 1, 
           xlab = expression(hat(p)), xtic = TRUE, digits.prob = 4, digits.xtic = 3, 
-          main = NULL, col = c("black", "hotpink"), lwd = 5, ...)
+          main = NULL, col = c("black", "red"), lwd = 4, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{xshade}{
 A single number or vector of two numbers, denoting values on the x-axis where shading under the curve begins and ends.
+However, if \code{NULL}, no shading occurs.
 }
   \item{size}{
 Number of Bernoulli trials (one or more).
@@ -91,13 +92,14 @@ This function \code{shadePhat} calls functions
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{\code{\link{shadeDist}}}
+\seealso{\code{\link{shadeDist}} and \code{\link{plotDist}}.}
 \examples{
 shadePhat( 0.3, 20, 0.4 )
-shadePhat( 0.3, 20, 0.4, lower.tail = FALSE )
+shadePhat( 0.3, 20, 0.4, lower.tail=FALSE )
 shadePhat( c(0.65, 0.75), 30, 0.7, col=c("purple","orange") )
-shadePhat( c(0.65, 0.75), 30, 0.7, lower.tail = FALSE )
+shadePhat( c(0.65, 0.75), 30, 0.7, lower.tail=FALSE )
 shadePhat( c(0.3, 0.4), 50, 0.35, xmin=0.1, xmax=0.6, col=c("blue","lightgreen") )
+shadePhat( NULL, 10, 0.6 )
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -12,23 +12,27 @@ where the domain of the graph need not be specified by the user.
 plotDist(distA = "dnorm", parmA1 = NULL, parmA2 = NULL, distB = NULL, parmB1 = NULL, 
          parmB2 = NULL, distC = NULL, parmC1 = NULL, parmC2 = NULL, xlab = NULL, 
          xmin = NULL, xmax = NULL, col = c("black", "red", "darkgreen"), 
-         is.discrete = NULL, additional.x.range = NULL, lwd = 5, ...)
+         is.discrete = NULL, additional.x.range = NULL, lwd = 4, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{distA}{
 Character variable naming the first probability density function (starting with "d") 
 or cumulative density function (starting with "p") to be graphed.
+May be set to "dprop" for a sample proportion, in which case only one distribution (i.e., \code{distA}) may be graphed,
+using the same arguments as \code{\link[stats]{dbinom}}. 
 }
   \item{parmA1}{
 The first argument in \code{distA}, excluding the dummy argument.
-For example, if \code{distA}="dnorm", then \code{parmA1} is the \code{mean} from "dnorm".
+For example, if \code{distA}="\code{\link{dnorm}}", then \code{parmA1} is the \code{mean} from "\code{\link{dnorm}}".
 Alternatively, \code{parmA1} may be set to be a vector of arguments, excluding the dummy argument.
+However, if \code{distA}="dprop", then \code{parmA1} should be set to the \code{size} in \code{\link[stats]{dbinom}}.
 }
   \item{parmA2}{
 The second argument in \code{distA}, excluding the dummy argument.
-For example, if \code{distA}="dnorm", then \code{parmA2} is the \code{sd} from "dnorm".
+For example, if \code{distA}="\code{\link{dnorm}}", then \code{parmA2} is the \code{sd} from "\code{\link{dnorm}}".
 Alternatively, \code{parmA2} may be set to be a vector of arguments, excluding both the dummy argument and \code{parmA1}.
+However, if \code{distA}="dprop", then \code{parmA2} should be set to the \code{prob} in \code{\link[stats]{dbinom}}.
 }
   \item{distB}{
 Character variable naming the second probability density function (starting with "d") 
@@ -93,7 +97,7 @@ the default of \code{NULL}.
 If three or more parameters of the distribution are needed, then the first parameter can be assigned
 to be a vector consisting of all of the parameters.
 
-The defaul value of \code{distA} is "dnorm"; i.e., for plotting the normal distribution.
+The defaul value of \code{distA} is "\code{\link{dnorm}}"; i.e., for plotting the normal distribution.
 
 The default values of all of the arguments following \code{parmC2} usually are sufficient.
 }
@@ -118,7 +122,7 @@ This function \code{plotDist} calls functions \code{\link{getMinMax}},
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{shadeDist}}, \code{\link[graphics]{plot}}, and
+\code{\link{shadeDist}}, \code{\link{shadePhat}}, \code{\link[graphics]{plot}}, and
 \code{\link{getMinMax}}
 }
 \examples{

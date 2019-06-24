@@ -1,9 +1,9 @@
 shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
                   lower.tail=TRUE, xlab=NULL, xmin=NULL, xmax=NULL, xtic=TRUE,
                   digits.prob=4, digits.xtic=3, is.discrete=NULL,
-                  additional.x.range=NULL, main=NULL, col=c("black","hotpink"), lwd=5, ...) {
+                  additional.x.range=NULL, main=NULL, col=c("black","red"), lwd=4, ...) {
   # Plots a continuous probability density function (pdf) and shades in a region.
-  # `xshade' can be a scalar or a vector of size 2.
+  # `xshade' can be a scalar, a vector of size 2, or NULL.
   # When `xshade' is a scalar and lower.tail is TRUE,
   #    the area from -Inf to xshade is shaded.
   # When `xshade' is a scalar and lower.tail is FALSE,
@@ -12,6 +12,7 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
   #    the tail probabilities are shaded.
   # When `xshade' is a vector and lower.tail is FALSE,
   #    the area from xshade[1] to xshade[2] is shaded.
+  # When `xshade' is NULL, no shading occurs.
   # `ddist' is the pdf and must be in quotes.  Some choices are
   #    dnorm, dexp, dcauchy, dt, dchisq, df, dunif.
   #    If the random variable is a sample proportion, then set ddist="dprop" and use same parameters from "dbinom".
@@ -44,7 +45,7 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
   #    and the color of the shading as col[2].
   # `lwd' is line width for discrete densities.
   # ...: optional arguments to `plot'.
- if (ddist!="dprop")    {
+ if (ddist!="dprop" & !is.null(xshade))    {
   num.grid.points <- 10001;    ylimchisq1 <- 1.2
   options(warn = -1);   
   if (!is.character(ddist))  
@@ -189,7 +190,10 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
                if (length(xshade)==2) xtic0=prettyNum(c(h(0.5), xshade),digits=digits.xtic)
                if (ddist %in% c("dchisq","df")) xtic0=prettyNum(c(h(0.5), xshade, 0),digits=digits.xtic)
                axis(1, at=xtic0, labels=xtic0)    } }
- }   # End of plotting for random variables other than a sample proportion
+ }   # End of plotting and shading for random variables other than a sample proportion
+ if (ddist!="dprop" & is.null(xshade)) 
+    plotDist(distA=ddist, parmA1=parm1, parmA2=parm2, xlab=xlab, xmin=xmin, xmax=xmax, col=col, is.discrete=is.discrete, 
+             additional.x.range=additional.x.range, lwd=lwd, ...)
  if (ddist=="dprop")    
     shadePhat(xshade=xshade, size=parm1, prob=parm2, lower.tail=lower.tail, xmin=xmin, xmax=xmax,
                   xlab=xlab, xtic=xtic, digits.prob=digits.prob, digits.xtic=digits.xtic, 
@@ -199,9 +203,9 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
 
 shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xmax=1,
                   xlab=expression(hat(p)), xtic=TRUE,
-                  digits.prob=4, digits.xtic=3, main=NULL, col=c("black","hotpink"), lwd=5, ...) {
+                  digits.prob=4, digits.xtic=3, main=NULL, col=c("black","red"), lwd=4, ...) {
   # Plots a continuous probability density function (pdf) and shades in a region.
-  # `xshade' can be a scalar or a vector of size 2.
+  # `xshade' can be a scalar, a vector of size 2, or NULL.
   # When `xshade' is a scalar and lower.tail is TRUE,
   #    the area from 0 to xshade is shaded.
   # When `xshade' is a scalar and lower.tail is FALSE,
@@ -210,6 +214,7 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
   #    the tail probabilities are shaded.
   # When `xshade' is a vector and lower.tail is FALSE,
   #    the area from xshade[1] to xshade[2] is shaded.
+  # When `xshade' is NULL, no shading occurs.
   # `size' and `prob' are scalars, corresponding to the parameters in `dbinom'.
   # To avoid ambiguity with discrete distributions, avoid boarder values with `xshade'.
   # `xmin' and `xmax' represent the limiting values on the x-axis.
@@ -228,6 +233,7 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
 
   if (!is.numeric(xshade) & !is.null(xshade))  stop("'xshade' must be numeric or NULL.")
   if (!is.numeric(size))  stop("'size' must be numeric.")
+  if (is.null(prob))  prob=0.5
   if (!is.numeric(prob))  stop("'prob' must be numeric.")
   if (!is.numeric(xmin) & !is.null(xmin))  stop("'xmin' must be numeric or NULL.")
   if (!is.numeric(xmax) & !is.null(xmax))  stop("'xmax' must be numeric or NULL.")
@@ -238,7 +244,7 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
   if (!is.numeric(xtic) & !is.logical(xtic))  stop("'xtic' must be numeric or logical.")
   if (!is.character(main) & !is.null(main))  stop("'main' must be character or NULL.")
   if (!(is.expression(xlab) | is.character(xlab)) & !is.null(xlab))  stop("'xlab' must be an expression, character, or NULL.")
-  if (is.null(xshade)) xshade=0.5
+  # if (is.null(xshade)) xshade=0.5
   if (is.null(size))   size=1
   if (is.null(prob))   prob=0.5
   if (is.null(xmin))   xmin=0
@@ -246,8 +252,8 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
   if (is.null(xlab))   xlab=expression(hat(p))
   num.grid.points <- 10001  
   options(warn = -1); n=size; p=prob
-  if (is.null(xshade)) xshade <- p
-  if (length(xshade)!=1 & length(xshade)!=2) stop("xshade must have length 1 or 2.")
+  # if (is.null(xshade)) xshade <- p
+  if (length(xshade)!=1 & length(xshade)!=2 & !is.null(xshade)) stop("xshade must have length 1 or 2 or be NULL.")
   if (length(xshade)==2)
     {if (xshade[1]>xshade[2]) {temp <- xshade[1]; xshade[1] <- xshade[2]; xshade[2] <- temp}}
   if (xmin>xmax) { temp <- xmin; xmin <- xmax; xmax <- temp }
@@ -255,28 +261,31 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
   options(warn = 0)
   f=function(x){dbinom(x,n,p)} ;   g=function(prop){dbinom(round(prop*n),n,p)}
   xmin1 <- ceiling(xmin*n); xmax1<-floor(xmax*n); x <- xmin1:xmax1
-  if (xshade[1]<xmin || xshade[length(xshade)]>xmax)
-     stop("xshade must be between xmin and xmax.")
-  if (lower.tail & length(xshade)==1)
-     {the.prob <- pbinom(xshade*n,n,p);    x1 <- x[ x<=xshade*n ]     }
-  if (!lower.tail & length(xshade)==1)
-     {the.prob <- 1-pbinom(xshade*n,n,p);  x1 <- x[ x>xshade*n ]   }
-  if (!lower.tail & length(xshade)==2)
-     {the.prob <- pbinom(xshade[2]*n,n,p)-pbinom(xshade[1]*n,n,p)
-      x1 <- x[ xshade[1]*n<x & x<=xshade[2]*n ]   }
-  if (lower.tail & length(xshade)==2)
-     {the.prob <- 1-pbinom(xshade[2]*n,n,p)+pbinom(xshade[1]*n,n,p)
-      x1 <- x[ x<=xshade[1]*n ] ;   x2 <- x[ x>xshade[2]*n ]    }
+  if (!is.null(xshade)) {
+    if (xshade[1]<xmin || xshade[length(xshade)]>xmax)
+       stop("xshade must be between xmin and xmax.")
+    if (lower.tail & length(xshade)==1)
+       {the.prob <- pbinom(xshade*n,n,p);    x1 <- x[ x<=xshade*n ]     }
+    if (!lower.tail & length(xshade)==1)
+       {the.prob <- 1-pbinom(xshade*n,n,p);  x1 <- x[ x>xshade*n ]   }
+    if (!lower.tail & length(xshade)==2)
+       {the.prob <- pbinom(xshade[2]*n,n,p)-pbinom(xshade[1]*n,n,p)
+        x1 <- x[ xshade[1]*n<x & x<=xshade[2]*n ]   }
+    if (lower.tail & length(xshade)==2)
+       {the.prob <- 1-pbinom(xshade[2]*n,n,p)+pbinom(xshade[1]*n,n,p)
+        x1 <- x[ x<=xshade[1]*n ] ;   x2 <- x[ x>xshade[2]*n ]    }
+  }
   ylim1 <- c(0, max(f(x),na.rm=TRUE))
-  if (is.null(main))   main=
+  if (is.null(main) & !is.null(xshade))   main=
        paste(c("Probability is", prettyNum(the.prob,digits=digits.prob)), collapse=" ")
   plot(x/n, f(x), xlim=c(xmin, xmax), ylim=ylim1, type="h", xlab=xlab,
        ylab="probability  density  function", xaxt="n", main=main, col=col[1], lwd=lwd, ...)
-  curve(g, min(x1/n), max(x1/n), max(x1)-min(x1)+1, add=TRUE, type="h", xaxt="n", col=col[2], lwd=lwd)
+  if (!is.null(xshade))   curve(g, min(x1/n), max(x1/n), max(x1)-min(x1)+1, add=TRUE, type="h", xaxt="n", col=col[2], lwd=lwd)
   if (lower.tail & length(xshade)==2)  {
       curve(g, min(x2/n), max(x2/n), max(x2)-min(x2)+1, add=TRUE, type="h", xaxt="n", col=col[2], lwd=lwd) }
   if (is.logical(xtic))
-     { if (!xtic) axis(1);
+     { if (is.null(xshade))  xtic=FALSE
+       if (!xtic) axis(1);
        if (xtic) {
            if (length(xshade)==1) xtic=prettyNum(c(xshade, 2*p-xshade, p, xmin, xmax),digits=digits.xtic)
            if (length(xshade)==2) xtic=prettyNum(c(xshade, p, xmin, xmax),digits=digits.xtic)
@@ -288,11 +297,13 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
 plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
              distB=NULL, parmB1=NULL, parmB2=NULL, distC=NULL, parmC1=NULL, parmC2=NULL,
              xlab=NULL, xmin=NULL, xmax=NULL, col=c("black","red","darkgreen"), 
-             is.discrete=NULL, additional.x.range=NULL, lwd=5, ...) {
+             is.discrete=NULL, additional.x.range=NULL, lwd=4, ...) {
   # Plots one, two, or three functions.
   # When plotting the pdf, some choices for `distA', `distB' and `distC' are
   #    dnorm, dexp, dcauchy, dt, dchisq, df, dunif, dbinom, 
   #    dgeom, dpois, dhyper, dnbinom.
+  #    If the first random variable is a sample proportion, then set distA=`dprop' and use same parameters from "dbinom".
+  #    However, only distA is graphed when distA is `dprop'.
   # When plotting the cdf, some choices for `distA', `distB' and `distC' are
   #    pnorm, pexp, pcauchy, pt, pchisq, pf, punif, pbinom, 
   #    pgeo, ppois, phyper, pnbinom.
@@ -313,6 +324,7 @@ plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
   # `additional.x.range' is a vector of TWO additional `x' values for evaluating the function.
   #    This is useful when the plot is too sparse.
   # `lwd' is line width for discrete densities.
+ if (distA!="dprop")  {
   num.grid.points <- 10001;    options(warn= -1);   ylimchisq1 <- 1.2
   if (!is.character(distA))
      stop("'distA' must be a probability density function or cumulative distribution function in character format.")
@@ -531,7 +543,16 @@ plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
                   pch=20, cex=0.5, col=col[1]) 
        if (length(additional.x.range)>=2)
           curve(fA, min(additional.x.range), max(additional.x.range), num.grid.points, 
-                add=TRUE, type="p", pch=20, cex=0.5, col=col[1])  }
+                add=TRUE, type="p", pch=20, cex=0.5, col=col[1])  }   
+ }
+ if (distA=="dprop")  {
+   if (!is.numeric(parmA1))  stop("'parmA1' must be numeric when used with 'dprop'.")
+   if (!is.numeric(parmA2))  stop("'parmA2' must be numeric when used with 'dprop'.")
+   if (!is.numeric(xmin) & !is.null(xmin))  stop("'xmin' must be numeric or NULL.")
+   if (!is.numeric(xmax) & !is.null(xmax))  stop("'xmax' must be numeric or NULL.")
+   if (!is.numeric(lwd))  stop("'lwd' must be numeric.")
+   shadePhat(xshade=NULL, size=parmA1, prob=parmA2, xmin=xmin, xmax=xmax, col=col, lwd=lwd, ...)   
+   }
 } 
 
 

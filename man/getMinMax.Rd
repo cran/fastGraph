@@ -97,7 +97,6 @@ getMinMax( -3, , "dnorm", 0, 1 )
 
 # Force maximum to be 3.
 getMinMax( , 3, "dnorm", 0, 1 )
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

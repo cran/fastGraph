@@ -65,14 +65,17 @@ This function \code{plotLine} uses functions \code{\link[graphics]{plot}} and \c
 \code{\link[graphics]{plot}} and \code{\link[stats]{lm}}
 }
 \examples{
+mfrow.old = par()$mfrow ;   par( mfrow = c( 2, 2 ) )
+
 x <- c( 2, 6, 5, -3, 11, 3 )
 y <- c( 16, 12, 19, -13, 27, 5 )
 plotLine( x, y )
-
+plotLine( x, -y, col=c("red", "green"), digits.intercept=2, digits.slope=3 )
 d <- data.frame( x=c( 2, 7, 9, 15, 12 ), y=c( 45, 32, 22, 15, 19 ) )
 plotLine( y~x, data=d, col=c("blue","orange") )
-
 plotLine( y~x, data=d, xlab="TIME", ylab="EXPENSE", digits.intercept=3, digits.slope=4 )
+
+par(mfrow=mfrow.old)
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

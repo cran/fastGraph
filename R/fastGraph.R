@@ -1,7 +1,7 @@
 shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
                   lower.tail=TRUE, xlab=NULL, xmin=NULL, xmax=NULL, xtic=TRUE,
                   digits.prob=4, digits.xtic=3, is.discrete=NULL,
-                  additional.x.range=NULL, main=NULL, col=c("black","red"), lwd=4, ...) {
+                  additional.x.range=NULL, main=NULL, col=c("black","red"), lwd=3, ...) {
   # Plots a continuous probability density function (pdf) and shades in a region.
   # `xshade' can be a scalar, a vector of size 2, or NULL.
   # When `xshade' is a scalar and lower.tail is TRUE,
@@ -77,13 +77,13 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
     if (xlab=="Z") {parm1=0; parm2=1}
     if (ddist=="dnorm" & is.null(parm2)) parm2==1
     temp <- c(parm1, parm2)
-    if (ddist=="dt" & length(temp)==1) xlab=paste(c("T_",temp[1]),sep="",collapse="")
-    if ( ddist=="dt" & length(temp)==2 ) xlab=paste(c("T_",temp[1],",",temp[2]),sep="",collapse="")
-    if (ddist=="dchisq" & length(temp)==1) xlab=paste(c("CHI-SQUARE_",temp[1]),sep="",collapse="")
-    if (ddist=="dchisq" & length(temp)==2) xlab=paste(c("CHI-SQUARE_",temp[1],",",temp[2]),sep="",collapse="")
-    if (ddist=="df" & length(temp)==2) xlab=paste(c("F_",temp[1],",",temp[2]),sep="",collapse="")
-    if ( ddist=="df" & length(temp)==3 )
-               xlab=paste(c("F_",temp[1],",",temp[2],",",temp[3]),sep="",collapse="") }
+    if (ddist=="dt" & length(temp)==1) xlab=bquote(T[.(temp[1])])
+    if ( ddist=="dt" & length(temp)==2 ) xlab=bquote(T[.(temp[1])~","~.(temp[2])])
+    if (ddist=="dchisq" & length(temp)==1) xlab=bquote({chi^2}[(.(temp[1]))])
+    if (ddist=="dchisq" & length(temp)==2) xlab=bquote({chi^2}[(.(temp[1])~","~.(temp[2]))])
+    if (ddist=="df" & length(temp)==2) xlab=bquote(F[.(temp[1])~","~.(temp[2])])
+    if ( ddist=="df" & length(temp)==3 ) xlab=bquote(F[.(temp[1])~","~.(temp[2])~","~.(temp[3])])
+    }
   parm1 <- c(parm1, parm2);  temp.vec <- getMinMax(xmin, xmax, ddist, parm1)
   if (is.null(xshade)) {xshade <- temp.vec$medianA}
   if (length(xshade)!=1 & length(xshade)!=2) stop("xshade must have length 1 or 2.")
@@ -99,7 +99,6 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
   if (!is.function(try(match.fun(pdist),silent=TRUE))) 
      stop("'ddist' must have corresponding cumulative distribution function 'pdist'.")
   qdist <- paste("q",substring(ddist,2),sep="")
-  if (pdist=="pf.nc") pdist <- "pf" ;     if (pdist=="pt.nc") pdist <- "pt"
   if (!is.function(try(match.fun(qdist),silent=TRUE))) 
      stop("'ddist' must have correspoding quantile function 'qdist'.")
   f <- function(z)   {
@@ -203,7 +202,7 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
 
 shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xmax=1,
                   xlab=expression(hat(p)), xtic=TRUE,
-                  digits.prob=4, digits.xtic=3, main=NULL, col=c("black","red"), lwd=4, ...) {
+                  digits.prob=4, digits.xtic=3, main=NULL, col=c("black","red"), lwd=3, ...) {
   # Plots a continuous probability density function (pdf) and shades in a region.
   # `xshade' can be a scalar, a vector of size 2, or NULL.
   # When `xshade' is a scalar and lower.tail is TRUE,
@@ -297,7 +296,7 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
 plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
              distB=NULL, parmB1=NULL, parmB2=NULL, distC=NULL, parmC1=NULL, parmC2=NULL,
              xlab=NULL, xmin=NULL, xmax=NULL, col=c("black","red","darkgreen"), 
-             is.discrete=NULL, additional.x.range=NULL, lwd=4, ...) {
+             is.discrete=NULL, additional.x.range=NULL, lwd=3, ...) {
   # Plots one, two, or three functions.
   # When plotting the pdf, some choices for `distA', `distB' and `distC' are
   #    dnorm, dexp, dcauchy, dt, dchisq, df, dunif, dbinom, 
@@ -372,24 +371,24 @@ plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
        if (!is.null(parmA1) & !is.null(parmA2)) { if (parmA1==0 & parmA2==1) xlab="Z" }    }
     temp = c(parmA1, parmA2)
     if (distA=="dt" || (distA=="pt" & length(temp)==1)) {
-       xlab=paste(c("T_",temp[1]),sep="",collapse="")
+       xlab=bquote(T[.(temp[1])])
        if ( !is.null(distB) ) { xlab="X"
            if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab="T" }  }
     if ( (distA=="pt" & length(temp)==2) | (distA=="dt" & length(temp)==2)) {
-       xlab=paste(c("T_",temp[1],",",temp[2]),sep="",collapse="")
+       xlab=bquote(T[.(temp[1])~","~.(temp[2])])
        if ( !is.null(distB) ) { xlab="X"
            if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab="T" }  }
     if (distA=="dchisq" || distA=="pchisq") {
-       xlab=paste(c("CHI-SQUARE_",parmA1[1]),sep="",collapse="")
-       if (length(temp)==2) xlab=paste(c("CHI-SQUARE_",temp[1],",",temp[2]),sep="",collapse="")
+       xlab=bquote({chi^2}[(.(temp[1]))])
+       if (length(temp)==2) xlab=bquote({chi^2}[(.(temp[1])~","~.(temp[2]))])
        if ( !is.null(distB) ) { xlab="X"
-           if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab="CHI-SQUARE" }  }
+           if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab=bquote(chi^2) }  }
     if (distA=="df" || (distA=="pf" & length(temp)==2)) {
-       xlab=paste(c("F_",temp[1],",",temp[2]),sep="",collapse="")
+       xlab=bquote(F[.(temp[1])~","~.(temp[2])])
        if ( !is.null(distB) ) { xlab="X"
            if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab="F" }  }
     if ( (distA=="pf" & length(temp)==3) || (distA=="df" & length(temp)==3) ) {
-       xlab=paste(c("F_",temp[1],",",temp[2],",",temp[3]),sep="",collapse="")
+       xlab=bquote(F[.(temp[1])~","~.(temp[2])~","~.(temp[3])])
        if ( !is.null(distB) ) { xlab="X"
            if ( length( union( union(distA,distB), union(distA,distC) ) )==1 ) xlab="F" }  }     }
   parmA1 <- c(parmA1, parmA2); parmB1 <- c(parmB1, parmB2); parmC1 <- c(parmC1, parmC2)

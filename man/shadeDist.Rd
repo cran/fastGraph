@@ -11,7 +11,7 @@ This function plots a probability density function, shades the area under the cu
 shadeDist(xshade = NULL, ddist = "dnorm", parm1 = NULL, parm2 = NULL, lower.tail = TRUE,
           xlab=NULL, xmin = NULL, xmax = NULL, xtic = TRUE, digits.prob = 4, 
           digits.xtic = 3, is.discrete = NULL, additional.x.range = NULL, main = NULL, 
-          col = c("black", "red"), lwd = 4, ...)
+          col = c("black", "red"), lwd = 3, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -62,7 +62,7 @@ the correct choice for density functions already named in the \code{stats} packa
 }
   \item{additional.x.range}{
 A vector of two additional x-values for evaluating the function.
-This argument would be needed only if the user is dissatified with the domain determined by the function.
+This argument would be needed only if the user is dissatisfied with the domain determined by the function.
 This argument is ignored if \code{ddist}="dprop".
 }
   \item{main}{
@@ -102,6 +102,8 @@ When illustrating the complement of a two-sided p-value or the complement of any
 Steven T. Garren, James Madison University, Harrisonburg, Virginia, USA
 }
 \note{
+The numeric value of the population median typically is shown on the x-axis when \code{xshade} is not \code{NULL}, 
+provided that this number actually fits on the x-axis; see description for argument \code{xtic} above.\\
 This function \code{shadeDist} calls functions \code{\link{getMinMax}},
 \code{\link[graphics]{plot}}, and \code{\link[graphics]{curve}}.
 }
@@ -110,33 +112,22 @@ This function \code{shadeDist} calls functions \code{\link{getMinMax}},
 
 \seealso{\code{\link{plotDist}} and \code{\link{shadePhat}}}
 \examples{
-shadeDist( 1.96, "dnorm", 0, 1 ) # P(Z<1.96) where Z ~ N(0,1)
+mfrow.old = par()$mfrow ;   par( mfrow = c( 3, 3 ) )
 
+shadeDist( 1.96, "dnorm", 0, 1 ) # P(Z<1.96) where Z ~ N(0,1)
 shadeDist( 1.96, lower.tail=FALSE ) # P(Z>1.96) where Z ~ N(0,1)
 
-shadeDist( c( 40, 60 ), , 50, 10, lower.tail=FALSE ) # P(40<X<60) where X~N(mu=50,sigma=10)
+# P(40<X<60) where X~N(mu=50,sigma=10)
+shadeDist( c( 40, 60 ), , 50, 10, lower.tail=FALSE, col=c("black", "lightblue") ) 
 
 shadeDist( c( 40, 60 ), "dnorm", 50, 10, col=c("purple", "lightgreen") ) 
-
-shadeDist( 5.8, "dchisq", 4, lower.tail=FALSE ) # Chi-squared distribution with 4 d.f.
-
+shadeDist( 6.8, "dchisq", 4, lower.tail=FALSE ) # Chi-squared distribution with 4 d.f.
 shadeDist( c( -1.3, 1.3 ), "dt", 13 ) # t with 13 d.f.
+shadeDist( 1.19, "dt", 15, 3, lower.tail=FALSE ) # t with 15 d.f. and non-centrality parameter=3
+shadeDist( 2.1, "df", 4, 25, lower.tail=FALSE, col=c("hotpink","turquoise") ) # F with 4 and 25 d.f.
+shadeDist( 0.6, "dprop", 20, 0.7, xmin=0.4 ) # Probability for sample proportion with n=20 and p=0.7
 
-shadeDist( 1.73, "dt", 15, lower.tail=FALSE, col=c("blue", "red") ) # t with 15 d.f.
-
-shadeDist( 1.73, "dt", 15, 3, lower.tail=FALSE ) # t with 15 d.f. and non-centrality parameter=3
-
-shadeDist( 1.7, "df", 4, 25, lower.tail=FALSE, col=c("hotpink","turquoise") ) # F with 4 and 25 d.f.
-
-shadeDist( NULL, "dpois", 3.2 ) # Poisson(mu=3.2)
-
-shadeDist( 6, "dpois", 3.2, lower.tail=FALSE, col=c("brown","yellow") ) # P(X>6), X~Poisson(mu=3.2)
-
-shadeDist( c( 2, 5 ), "dbinom", 10, 0.4 ) # Binomial(n=10, p=0.4) probability
-
-shadeDist( NULL, "dprop", 20, 0.7 ) # Sample proportion with n=20 and p=0.7
-
-shadeDist( 0.6, "dprop", 20, 0.7 ) # Probability for sample proportion with n=20 and p=0.7
+par( mfrow = mfrow.old )
 }
 
 \keyword{ probability density function }

@@ -1,16 +1,17 @@
 \name{shadePhat}
 \alias{shadePhat}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Displays Area Under Curve of Probability Density Function of Sample Proportion
+\title{Displays Cumulative Probability of a Sample Proportion
 %%  ~~function to do ... ~~
 }
 \description{
-This function plots a probability density function of a sample proportion, shades the area under the curve, and computes the probability.
+This function plots the probability density function of a sample proportion, shades the lines denoting probability, 
+and computes the cumulative probability.
 }
 \usage{
 shadePhat(xshade = NULL, size = 1, prob = 0.5, lower.tail = TRUE, xmin = 0, xmax = 1, 
           xlab = expression(hat(p)), xtic = TRUE, digits.prob = 4, digits.xtic = 3, 
-          main = NULL, col = c("black", "red"), lwd = 4, ...)
+          main = NULL, col = c("black", "red"), lwd = 3, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -94,12 +95,16 @@ This function \code{shadePhat} calls functions
 
 \seealso{\code{\link{shadeDist}} and \code{\link{plotDist}}.}
 \examples{
+mfrow.old = par()$mfrow ;   par( mfrow = c( 3, 2 ) )
+
 shadePhat( 0.3, 20, 0.4 )
 shadePhat( 0.3, 20, 0.4, lower.tail=FALSE )
-shadePhat( c(0.65, 0.75), 30, 0.7, col=c("purple","orange") )
-shadePhat( c(0.65, 0.75), 30, 0.7, lower.tail=FALSE )
+shadePhat( c(0.65, 0.75), 30, 0.7, xmin=0.4, col=c("purple","orange") )
+shadePhat( c(0.65, 0.75), 30, 0.7, lower.tail=FALSE, xmin=0.4 )
 shadePhat( c(0.3, 0.4), 50, 0.35, xmin=0.1, xmax=0.6, col=c("blue","lightgreen") )
-shadePhat( NULL, 10, 0.6 )
+shadePhat( NULL, 10, 0.6, main = "Sample proportion" )
+
+par( mfrow = mfrow.old )
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

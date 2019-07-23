@@ -1,7 +1,7 @@
 shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
                   lower.tail=TRUE, xlab=NULL, xmin=NULL, xmax=NULL, xtic=TRUE,
                   digits.prob=4, digits.xtic=3, is.discrete=NULL,
-                  additional.x.range=NULL, main=NULL, col=c("black","red"), lwd=3, ...) {
+                  additional.x.range=NULL, main=NULL, col=c("black","red"), lwd=2, ...) {
   # Plots a continuous probability density function (pdf) and shades in a region.
   # `xshade' can be a scalar, a vector of size 2, or NULL.
   # When `xshade' is a scalar and lower.tail is TRUE,
@@ -200,9 +200,9 @@ shadeDist <- function(xshade=NULL, ddist="dnorm", parm1=NULL, parm2=NULL,
 } 
 
 
-shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xmax=1,
+shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=NULL, xmax=NULL,
                   xlab=expression(hat(p)), xtic=TRUE,
-                  digits.prob=4, digits.xtic=3, main=NULL, col=c("black","red"), lwd=3, ...) {
+                  digits.prob=4, digits.xtic=3, main=NULL, col=c("black","red"), lwd=2, ...) {
   # Plots a continuous probability density function (pdf) and shades in a region.
   # `xshade' can be a scalar, a vector of size 2, or NULL.
   # When `xshade' is a scalar and lower.tail is TRUE,
@@ -243,15 +243,17 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
   if (!is.numeric(xtic) & !is.logical(xtic))  stop("'xtic' must be numeric or logical.")
   if (!is.character(main) & !is.null(main))  stop("'main' must be character or NULL.")
   if (!(is.expression(xlab) | is.character(xlab)) & !is.null(xlab))  stop("'xlab' must be an expression, character, or NULL.")
-  # if (is.null(xshade)) xshade=0.5
   if (is.null(size))   size=1
   if (is.null(prob))   prob=0.5
-  if (is.null(xmin))   xmin=0
-  if (is.null(xmax))   xmax=1
+  xmin0 = xmin ;   xmax0 = xmax
+  if (is.null(xmin))   xmin0 = min( qbinom( 0.0001, size, prob ) / size, xshade )
+  if (is.null(xmax))   xmax0 = max( qbinom( 0.0001, size, prob, lower.tail=FALSE ) / size, xshade )
+  cushion = abs( xmax0 - xmin0 ) / 20
+  if (is.null(xmin))  xmin = max( xmin0 - cushion, 0 )
+  if (is.null(xmax))  xmax = min( xmax0 + cushion, 1 )
   if (is.null(xlab))   xlab=expression(hat(p))
   num.grid.points <- 10001  
   options(warn = -1); n=size; p=prob
-  # if (is.null(xshade)) xshade <- p
   if (length(xshade)!=1 & length(xshade)!=2 & !is.null(xshade)) stop("xshade must have length 1 or 2 or be NULL.")
   if (length(xshade)==2)
     {if (xshade[1]>xshade[2]) {temp <- xshade[1]; xshade[1] <- xshade[2]; xshade[2] <- temp}}
@@ -259,7 +261,7 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
   x <- xmin + (xmax-xmin)*(0:num.grid.points)/num.grid.points; options(warn = -1)
   options(warn = 0)
   f=function(x){dbinom(x,n,p)} ;   g=function(prop){dbinom(round(prop*n),n,p)}
-  xmin1 <- ceiling(xmin*n); xmax1<-floor(xmax*n); x <- xmin1:xmax1
+  xmin1 <- ceiling(xmin*n); xmax1<-floor(xmax*n); x <- xmin1:xmax1 ;   x1 <- x2 <- NULL ; xmin9=xmin1/n ; xmax9=xmax1/n
   if (!is.null(xshade)) {
     if (xshade[1]<xmin || xshade[length(xshade)]>xmax)
        stop("xshade must be between xmin and xmax.")
@@ -280,14 +282,14 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
   plot(x/n, f(x), xlim=c(xmin, xmax), ylim=ylim1, type="h", xlab=xlab,
        ylab="probability  density  function", xaxt="n", main=main, col=col[1], lwd=lwd, ...)
   if (!is.null(xshade))   curve(g, min(x1/n), max(x1/n), max(x1)-min(x1)+1, add=TRUE, type="h", xaxt="n", col=col[2], lwd=lwd)
-  if (lower.tail & length(xshade)==2)  {
+  if (lower.tail & length(xshade)==2 & length(x2)>0.5 )  {
       curve(g, min(x2/n), max(x2/n), max(x2)-min(x2)+1, add=TRUE, type="h", xaxt="n", col=col[2], lwd=lwd) }
   if (is.logical(xtic))
      { if (is.null(xshade))  xtic=FALSE
        if (!xtic) axis(1);
        if (xtic) {
-           if (length(xshade)==1) xtic=prettyNum(c(xshade, 2*p-xshade, p, xmin, xmax),digits=digits.xtic)
-           if (length(xshade)==2) xtic=prettyNum(c(xshade, p, xmin, xmax),digits=digits.xtic)
+           if (length(xshade)==1) xtic=prettyNum(c(xshade, 2*p-xshade, p, xmin9, xmax9),digits=digits.xtic)
+           if (length(xshade)==2) xtic=prettyNum(c(xshade, p, xmin9, xmax9),digits=digits.xtic)
            axis(1, at=xtic, labels=xtic) } }
   if (!is.logical(xtic))    axis(1, at=xtic, labels=xtic)
 } 
@@ -296,7 +298,7 @@ shadePhat <- function(xshade=NULL, size=1, prob=0.5, lower.tail=TRUE, xmin=0, xm
 plotDist <- function(distA="dnorm", parmA1=NULL, parmA2=NULL,
              distB=NULL, parmB1=NULL, parmB2=NULL, distC=NULL, parmC1=NULL, parmC2=NULL,
              xlab=NULL, xmin=NULL, xmax=NULL, col=c("black","red","darkgreen"), 
-             is.discrete=NULL, additional.x.range=NULL, lwd=3, ...) {
+             is.discrete=NULL, additional.x.range=NULL, lwd=2, ...) {
   # Plots one, two, or three functions.
   # When plotting the pdf, some choices for `distA', `distB' and `distC' are
   #    dnorm, dexp, dcauchy, dt, dchisq, df, dunif, dbinom, 
@@ -601,12 +603,6 @@ getMinMax <- function(xmin=NULL, xmax=NULL, distA, parmA1=NULL, parmA2=NULL,
   return.now <- FALSE ;  medianA <- medianB <- medianC <- NULL
   parmA1 <- c(parmA1, parmA2); parmB1 <- c(parmB1, parmB2); parmC1 <- c(parmC1, parmC2)
   if (!is.null(xmin) & !is.null(xmax)) medianA <- medianB <- medianC <- mean(xmin,xmax)
-  # if (distA=="pt" & length(parmA1)>1) return.now <- TRUE
-  # if (!is.null(distB)) {if (distB=="pt" & length(parmB1)>1) return.now <- TRUE}
-  # if (!is.null(distC)) {if (distC=="pt" & length(parmC1)>1) return.now <- TRUE}
-  # if (distA=="pf" & length(parmA1)>2) return.now <- TRUE
-  # if (!is.null(distB)) {if (distB=="pf" & length(parmB1)>2) return.now <- TRUE}
-  # if (!is.null(distC)) {if (distC=="pf" & length(parmC1)>2) return.now <- TRUE}
   if (return.now & (is.null(xmin) || is.null(xmax))) 
     stop("Neither `xmin' nor `xmax' can be NULL for this distribution.")
   if (!return.now) {

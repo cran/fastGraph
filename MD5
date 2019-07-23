@@ -1,9 +1,9 @@
-88c28f6061d7b0ea0a8f73dfe9605f83 *DESCRIPTION
-a4f4b7c229f8949b1220e314f3cb9bb6 *NAMESPACE
-f45f25c2b82c768e605e6da80ce2d93f *R/fastGraph.R
-c4a51f26972756ff6599b54aa8640e95 *man/fastGraph-package.Rd
+7e7e5d9f9b21a26cf1869e9a1a2f9d04 *DESCRIPTION
+70e08862ea463b54ce60db564c6d2099 *NAMESPACE
+2aeb1c7c5cde8ea7e0514fcaa524ff7c *R/fastGraph.R
+a9ba0e979232fa0e2771b19681e276f8 *man/fastGraph-package.Rd
 f661bee81f98f8810b596d858b130b83 *man/getMinMax.Rd
-c096a851936a624c67d6e7677a892935 *man/plotDist.Rd
-094640579556291365255030178d0ee4 *man/plotLine.Rd
-88e022329a8ec1db6ff6f6bc8798df76 *man/shadeDist.Rd
-2ec42805df0014924a29a15fce0e70e8 *man/shadePhat.Rd
+6ae1edb03fcaa1a8e4e6afc6fcc8154c *man/plotDist.Rd
+64f7dc034c340e78011f1df73b885544 *man/plotLine.Rd
+4e6ac05230df7aabd0bf4fbc823c1642 *man/shadeDist.Rd
+db4f89eb2fec178adf7ced578b199627 *man/shadePhat.Rd

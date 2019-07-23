@@ -25,21 +25,19 @@ considers the distribution of only the sample proportion.}
 \keyword{ plot }
 \seealso{Functions \code{\link[graphics]{plot}} and \code{\link[stats]{lm}}, and \emph{R}-package \code{\link[jmuOutlier]{jmuOutlier}}.}
 \examples{
-mfrow.old = par()$mfrow ;    par( mfrow=c(2,2) )
+par( mfrow=c(2,2) )
 
-# Plots Binomial(n=100,p) density functions, where p=0.4, 0.5, and 0.7
-# in colors black, red, and green, respectively.
-plotDist( "dbinom", 100, 0.4, "dbinom", 100, 0.5, "dbinom", 100, 0.7,main="Binomial distributions" )
-
-# Plots Poisson(mean=12) with Normal approximation.
-plotDist( "dpois", 12, , "dnorm", 12, sqrt(12), 
-   main = expression(paste("Normal approximation to Poisson(",mu,"=12)")) )
+# Shows P(|Z| < 1.96), where Z is standard normal.
+shadeDist( c(-1,1)*qnorm(0.975), lower.tail=FALSE )
 
 # Shows P(|T| > 1.7), where T is t distributed with 19 d.f.
-shadeDist( c(-1.7, 1.7), "dt", 19 ) 
+shadeDist( c(-1.7, 1.7), "dt", 19, col=c("blue", "hotpink") )
+
+# Plots distribution of Poisson(mu=6).
+plotDist( "dpois", 6, xmin=0, col="seagreen", main = expression(paste("Poisson(",mu,"=6)")) )
 
 # Graphs line of simple linear regression model and states equation.
-plotLine( c(-5,6,2,9,-11), c(-7,17,21,29,8), digits.intercept=3, digits.slope=4 )  
+plotLine( c(-5,6,2,9,-11), c(-7,17,21,29,8), digits.intercept=3, digits.slope=4 )
 
-par( mfrow = mfrow.old )
+par( mfrow=c(1,1) )
 }

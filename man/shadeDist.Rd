@@ -11,7 +11,7 @@ This function plots a probability density function, shades the area under the cu
 shadeDist(xshade = NULL, ddist = "dnorm", parm1 = NULL, parm2 = NULL, lower.tail = TRUE,
           xlab=NULL, xmin = NULL, xmax = NULL, xtic = TRUE, digits.prob = 4, 
           digits.xtic = 3, is.discrete = NULL, additional.x.range = NULL, main = NULL, 
-          col = c("black", "red"), lwd = 3, ...)
+          col = c("black", "red"), lwd = 2, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -112,22 +112,28 @@ This function \code{shadeDist} calls functions \code{\link{getMinMax}},
 
 \seealso{\code{\link{plotDist}} and \code{\link{shadePhat}}}
 \examples{
-mfrow.old = par()$mfrow ;   par( mfrow = c( 3, 3 ) )
+par( mfrow=c(3,3) )
 
-shadeDist( 1.96, "dnorm", 0, 1 ) # P(Z<1.96) where Z ~ N(0,1)
-shadeDist( 1.96, lower.tail=FALSE ) # P(Z>1.96) where Z ~ N(0,1)
+shadeDist( qnorm(0.975), "dnorm", 0, 1 ) # P(Z<1.96) where Z ~ N(0,1)
+
+shadeDist( qnorm(0.975), lower.tail=FALSE ) # P(Z>1.96) where Z ~ N(0,1)
 
 # P(40<X<60) where X~N(mu=50,sigma=10)
-shadeDist( c( 40, 60 ), , 50, 10, lower.tail=FALSE, col=c("black", "lightblue") ) 
+shadeDist( c( 40, 60 ), , 50, 10, lower.tail=FALSE, col=c("black", "lightblue") )
 
-shadeDist( c( 40, 60 ), "dnorm", 50, 10, col=c("purple", "lightgreen") ) 
+shadeDist( c( 40, 60 ), "dnorm", 50, 10, col=c("purple", "lightgreen") )
+
 shadeDist( 6.8, "dchisq", 4, lower.tail=FALSE ) # Chi-squared distribution with 4 d.f.
+
 shadeDist( c( -1.3, 1.3 ), "dt", 13 ) # t with 13 d.f.
+
 shadeDist( 1.19, "dt", 15, 3, lower.tail=FALSE ) # t with 15 d.f. and non-centrality parameter=3
+
 shadeDist( 2.1, "df", 4, 25, lower.tail=FALSE, col=c("hotpink","turquoise") ) # F with 4 and 25 d.f.
+
 shadeDist( 0.6, "dprop", 20, 0.7, xmin=0.4 ) # Probability for sample proportion with n=20 and p=0.7
 
-par( mfrow = mfrow.old )
+par( mfrow=c(1,1) )
 }
 
 \keyword{ probability density function }

@@ -12,7 +12,7 @@ where the domain of the graph need not be specified by the user.
 plotDist(distA = "dnorm", parmA1 = NULL, parmA2 = NULL, distB = NULL, parmB1 = NULL, 
          parmB2 = NULL, distC = NULL, parmC1 = NULL, parmC2 = NULL, xlab = NULL, 
          xmin = NULL, xmax = NULL, col = c("black", "red", "darkgreen"), 
-         is.discrete = NULL, additional.x.range = NULL, lwd = 3, ...)
+         is.discrete = NULL, additional.x.range = NULL, lwd = 2, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -126,25 +126,24 @@ This function \code{plotDist} calls functions \code{\link{getMinMax}},
 \code{\link{getMinMax}}
 }
 \examples{
-mfrow.old = par()$mfrow ;   par( mfrow = c( 2, 2 ) )
+par( mfrow=c(2,2) )
 
 # Plots standard normal density in black, t density with 3 d.f. in red, and
 # non-central t density with 3 d.f. and non-centrality parameter=1.4 in green.
 plotDist( "dnorm", 0, 1, "dt", 3, 0, "dt", 3, 1.4, 
           main=expression(paste("Standard Normal,", T[3],", and ", T[paste(3,",",1.4)], sep="")) ) 
 
-# Plots normal approximation to Binomial(n=100, p=0.4).
-plotDist( , 40, sqrt(100*0.4*0.6), "dbinom", 100, 0.4, col=c("blue", "hotpink"), 
-   main = "Normal approximation to Binomial" )
+plotDist( "dchisq", 15, , "dnorm", 15, sqrt(2*15), col=c("blue", "hotpink"),
+   main=expression(paste("Normal approximation to ",chi[~(15)]^{~2})) ) 
 
-# Plots cumulative normal and Cauchy distribution functions.
+# Cumulative distribution functions.
 plotDist( "pnorm", 50, 10, "pcauchy", 50, 10, col=c("purple","orange"), 
-   main = "Normal and Cauchy" )
+   main = "Normal and Cauchy CDFs" )
 
 # Plots sample proportion by calling function shadePhat.
 plotDist( "dprop", 15, 0.3, col="turquoise", main = "Sample proportion" )
 
-par( mfrow = mfrow.old )
+par( mfrow=c(1,1) )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
